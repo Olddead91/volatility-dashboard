@@ -4,14 +4,11 @@ import plotly.graph_objects as go
 import pandas as pd
 import pytz
 import numpy as np
-from scipy.stats import norm
+from scipy.special import ndtr
 import math
 import plotly.express as px
 import dash_bootstrap_components as dbc
 from dash import html
-
-N = norm.cdf
-Np = norm.pdf
 
 def hv_charts(currency_data, time_frames):
 
@@ -217,23 +214,22 @@ def calculate_time_difference(date_string):
     time_difference_years = time_difference / seconds_in_a_year
     return time_difference_years
 
-
 def bs_price(S, K, T, R, sigma, option_type):
     d1 = (np.log(S / K) + (R + sigma ** 2 / 2) * T) / (sigma * np.sqrt(T))
     d2 = d1 - sigma * np.sqrt(T)
 
     if option_type == "C":
-        price = S * N(d1) - K * np.exp(-R*T)* N(d2)
+        price = S * ndtr(d1) - K * np.exp(-R*T) * ndtr(d2)
     elif option_type == "P":
-        price = K*np.exp(-R*T)*N(-d2) - S*N(-d1)
+        price = K * np.exp(-R*T) * ndtr(-d2) - S * ndtr(-d1)
     return price
 
 def bs_delta(S, K, T, R, sigma, option_type):
     d1 = (np.log(S / K) + (R + sigma ** 2 / 2) * T) / (sigma * np.sqrt(T))
     if option_type == "C":
-        delta = N(d1)
+        delta = ndtr(d1)
     elif option_type == "P":
-        delta = N(d1) - 1
+        delta = ndtr(d1) - 1
     return delta
 
 def calculate_implied_volatility(option_price, S, K, T, R, option_type):

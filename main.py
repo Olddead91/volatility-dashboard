@@ -351,7 +351,7 @@ def historical_price_data(*args):
             'The ratio of parkinson vol to close to close vol.'
         ),
         chart_card(
-            f'{selected_currency} Parkinson Historical Volatility',
+            f'{selected_currency} Volatility Cones',
             dcc.Graph(id='vol_cones', figure=vol_cones),
             'Volatility cones for {selected_currency}. Uses parkinson volatility.'
         ),
